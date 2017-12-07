@@ -6,16 +6,25 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientConnection extends Thread {
+public class ServerConnection extends Thread {
 
 	private static Socket connectionToServer;
 	private static PrintWriter out;
 	private static String hostname;
 	private static int port;
 
-	public ClientConnection(String hostname, int port) {
+	
+	public ServerConnection(String hostname, int port) {
 		this.hostname = hostname;
 		this.port = port;
+	}
+	
+	public static Socket getConnectionToServer() {
+		return connectionToServer;
+	}
+
+	public static void setConnectionToServer(Socket connectionToServer) {
+		ServerConnection.connectionToServer = connectionToServer;
 	}
 
 	public void run() {

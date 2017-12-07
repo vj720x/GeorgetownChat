@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.vismark.Humanity.networking.ServerConnection;
+
 public class UserRegistrationPanel extends JPanel {
 
 	//Logger for debugging purposes:
@@ -33,10 +35,11 @@ public class UserRegistrationPanel extends JPanel {
 	private JButton connectionButton;
 	
 	//Networking components
-	private Socket serverConnectionSocket = null;
 	private int portNumber;
 	private String host;
-	
+	private static ServerConnection connectionToServer;
+	private String fullName;
+	private String userName;
 
 	// Default constructor
 	public UserRegistrationPanel() {
@@ -92,18 +95,24 @@ public class UserRegistrationPanel extends JPanel {
 		connectionButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				
-				validateUserInput();
-				
-				//TODO
-				// attemptconntection()
-				// once connection is made, gray-out all of the textfields, and change label on
-				// the connectionButton to
-				// read "Disconnect"
+				try 
+				{
+					validateAllUserInput();
+					
+					attemptConnectionToServer();
+					
+					// once connection is made, gray-out all of the textfields, and change label on
+					// the connectionButton to
+					// read "Disconnect"
+				}
+				catch(ConnectionFailedException e) {
+					System.out.println("something went wrong in connecting to server.");
+				}
 			}
 		});
 	}
 
-	public void validateUserInput() {
+	public void validateAllUserInput() {
 	
 		// revert background of all fields to white, if appliclable (this will execute
 		// when re-trying after exception
@@ -111,13 +120,11 @@ public class UserRegistrationPanel extends JPanel {
 
 		try {
 			
-			validateAllInputFields();
+			validateEachInputField();
 			
 			//If validation is successful, store data entered by user:
 			storeInput();
 			
-			
-			throw new ValidationFailedException();
 		} 
 		catch (ValidationFailedException e) {
 			
@@ -127,7 +134,8 @@ public class UserRegistrationPanel extends JPanel {
 
 	}
 	
-	public void validateAllInputFields() throws ValidationFailedException {
+
+	public void validateEachInputField() throws ValidationFailedException {
 		
 		boolean allInputValuesPassedValidation = true;
 		
@@ -170,18 +178,33 @@ public class UserRegistrationPanel extends JPanel {
 		
 		setHost(this.getHostAddressTextField().getText());
 		setPortNumber(Integer.parseInt(this.getPortTextField().getText()));
+		setFullName(this.getFullNameTextField().getText());
+		setUserName(this.getUserNameTextField().getText());
 		
 		LOGGER.log(Level.INFO, "stored port #: " + this.getPortNumber());
 		LOGGER.log(Level.INFO, "stored hostname: " + this.getHost());
+		LOGGER.log(Level.INFO, "stored fullName: " + this.getFullName());
+		LOGGER.log(Level.INFO, "stored userName: " + this.getUserName());
 	}
 
 	private class ValidationFailedException extends Exception {
 
 		public ValidationFailedException() {
-			
+			System.out.println("inside of the validationfailedexception");
 		}
 
 	}
+	
+	private class ConnectionFailedException extends Exception {
+		
+		public ConnectionFailedException() {
+			//set portTextField and hostnametextField to red in color
+			portTextField.setBackground(Color.RED);
+			hostAddressTextField.setBackground(Color.RED);
+			System.out.println("inside of the connectionfailedexception");
+		}
+	}
+	
 
 	public void revertBackgroundColors() {
 		fullNameTextField.setBackground(Color.white);
@@ -191,15 +214,22 @@ public class UserRegistrationPanel extends JPanel {
 	}
 	
 	
+	public void attemptConnectionToServer() throws ConnectionFailedException {
+
+		// take hostname and port number provided by user, and attempt to make a
+		// connection to it.
+		// if connection fails, a ConnectionFailedException error will be thrown.
+
+		System.out.println("attempting connection to host: " + host
+					 		+ " and port: " + portNumber);
+		
+		connectionToServer = new ServerConnection(host, portNumber);
+		connectionToServer.start();
+
+//			if (!connectionToServer.getConnectionToServer().isConnected())
+//				throw new ConnectionFailedException();
 	
-	public void attemptConnectionToServer() {
-		
-		//first, initialize
-		
-		//this.serverConnectionSocket = new Socket(this.getHost(), this.por);
-		
 	}
-	
 	
 	public JLabel getFullNameLabel() {
 		return fullNameLabel;
@@ -237,16 +267,28 @@ public class UserRegistrationPanel extends JPanel {
 		return connectionButton;
 	}
 
-	public Socket getServerConnectionSocket() {
-		return serverConnectionSocket;
-	}
-
 	public int getPortNumber() {
 		return portNumber;
 	}
 
 	public String getHost() {
 		return host;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public void setFullNameLabel(JLabel fullNameLabel) {
@@ -283,10 +325,6 @@ public class UserRegistrationPanel extends JPanel {
 
 	public void setConnectionButton(JButton connectionButton) {
 		this.connectionButton = connectionButton;
-	}
-
-	public void setServerConnectionSocket(Socket serverConnectionSocket) {
-		this.serverConnectionSocket = serverConnectionSocket;
 	}
 
 	public void setPortNumber(int portNumber) {
