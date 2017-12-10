@@ -31,5 +31,9 @@ public class ConnectedUsersPanel extends JPanel {
 		listOfConnectedUsersScrollPane.setBackground(Color.GREEN);
 		add(listOfConnectedUsersScrollPane);
 	}
+	
+	public void addNewUser(String newUserName) {
+		listOfConnectedUsersTextArea.setText(newUserName + "\n");
+	}
 
 }

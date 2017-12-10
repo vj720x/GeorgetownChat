@@ -13,10 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.vismark.Humanity.networking.ServerConnection;
-
 public class UserRegistrationPanel extends JPanel {
 
+	//TODO: ADD FUNCTIONALITY SO THAT WHEN THE USER HAS CONNECTED, AND DECIDES TO disconnect.
+	
+	
 	//Logger for debugging purposes:
 	private static final Logger LOGGER = Logger.getLogger(UserRegistrationPanel.class.getName());
 	
@@ -37,7 +38,8 @@ public class UserRegistrationPanel extends JPanel {
 	//Networking components
 	private int portNumber;
 	private String host;
-	private static ServerConnection connectionToServer;
+	//private static ServerConnection connectionToServer;
+	private static Socket connectionToServer;
 	private String fullName;
 	private String userName;
 
@@ -89,27 +91,6 @@ public class UserRegistrationPanel extends JPanel {
 		// Connection JButton
 		connectionButton = new JButton("Connect");
 		add(connectionButton);
-
-		
-		// JButton configuration
-		connectionButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				
-				try 
-				{
-					validateAllUserInput();
-					
-					attemptConnectionToServer();
-					
-					// once connection is made, gray-out all of the textfields, and change label on
-					// the connectionButton to
-					// read "Disconnect"
-				}
-				catch(ConnectionFailedException e) {
-					System.out.println("something went wrong in connecting to server.");
-				}
-			}
-		});
 	}
 
 	public void validateAllUserInput() {
@@ -187,7 +168,7 @@ public class UserRegistrationPanel extends JPanel {
 		LOGGER.log(Level.INFO, "stored userName: " + this.getUserName());
 	}
 
-	private class ValidationFailedException extends Exception {
+	public class ValidationFailedException extends Exception {
 
 		public ValidationFailedException() {
 			System.out.println("inside of the validationfailedexception");
@@ -195,7 +176,7 @@ public class UserRegistrationPanel extends JPanel {
 
 	}
 	
-	private class ConnectionFailedException extends Exception {
+	public class ConnectionFailedException extends Exception {
 		
 		public ConnectionFailedException() {
 			//set portTextField and hostnametextField to red in color
@@ -220,15 +201,26 @@ public class UserRegistrationPanel extends JPanel {
 		// connection to it.
 		// if connection fails, a ConnectionFailedException error will be thrown.
 
-		System.out.println("attempting connection to host: " + host
-					 		+ " and port: " + portNumber);
 		
-		connectionToServer = new ServerConnection(host, portNumber);
-		connectionToServer.start();
+		//connectionToServer.start();
 
 //			if (!connectionToServer.getConnectionToServer().isConnected())
 //				throw new ConnectionFailedException();
 	
+	}
+	
+	
+	public void turnAllPanelItemsIndeditable() {
+		//now that a connection to the server has successfully been made, 
+		//we want to make all fields in the panel ineditable, 
+		fullNameTextField.setEditable(false);
+		userNameTextField.setEditable(false);
+		hostAddressTextField.setEditable(false);
+		portTextField.setEditable(false);
+	}
+	
+	public void changeTextOnConnectionButton() {
+		this.getConnectionButton().setText("Disconnect");
 	}
 	
 	public JLabel getFullNameLabel() {
@@ -282,6 +274,10 @@ public class UserRegistrationPanel extends JPanel {
 	public String getUserName() {
 		return userName;
 	}
+
+//	public static ServerConnection getConnectionToServer() {
+//		return connectionToServer;
+//	}
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;

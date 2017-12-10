@@ -22,7 +22,7 @@ public class UserInputPanel extends JPanel{
 		
 		//configure user-input JTextArea
 		userInputTextArea = new JTextArea(5, 40);
-		userInputTextArea.setEditable(true);
+		userInputTextArea.setEditable(false);
 		
 		//wrap user-input JTextArea into JScollPane
 		scrollPane = new JScrollPane(userInputTextArea);
@@ -30,6 +30,22 @@ public class UserInputPanel extends JPanel{
 		
 		//configure JButton
 		sendButton = new JButton("Send");
+		sendButton.setEnabled(false);
 		add(sendButton);		
 	}
+	
+	//will be activated once a connection to server has been established
+	public void enableUserInputPanel() {
+		userInputTextArea.setEditable(true);
+		sendButton.setEnabled(true);
+	}
+	
+	public JButton getSendButton() {
+		return this.sendButton;
+	}
+	
+	public JTextArea getUserInputTextArea() {
+		return userInputTextArea;
+	}
+	
 }

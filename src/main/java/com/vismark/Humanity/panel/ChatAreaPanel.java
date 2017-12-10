@@ -28,5 +28,9 @@ public class ChatAreaPanel extends JPanel {
 
 		add(scrollPane, BorderLayout.CENTER);
 	}
+	
+	public JTextArea getChatRoomMessages() {
+		return this.chatRoomMessages;
+	}
 
 }
