@@ -9,6 +9,6 @@ public class Driver
 	public static void main(String[] args) {
 		new MainFrame("Humanity");
 		
-		//just adding this comment
+		//just adding this comment (on Wed Jan 3, 2017)
 	}
 }
