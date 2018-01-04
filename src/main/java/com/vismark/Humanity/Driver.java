@@ -7,7 +7,7 @@ import com.vismark.Humanity.frame.MainFrame;
 public class Driver 
 {
 	public static void main(String[] args) {
-		new MainFrame("Humanity");
+		new MainFrame("Georgetown Chat");
 		
 		//just adding this comment (on Wed Jan 3, 2017)
 	}

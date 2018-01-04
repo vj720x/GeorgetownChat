@@ -84,8 +84,7 @@ public class MainFrame extends JFrame {
 							
 							if (userInputTextArea.getText().length() > 0) {
 								String myMessage = userInputTextArea.getText();
-								writeToServer.println(myUserName + ": " + myMessage);
-								//chatTextArea.append(myUserName + ": " + myMessage + "\n");	
+								writeToServer.println(myUserName + ": " + myMessage);	
 								userInputTextArea.setText(""); //clear input area once msg is sent
 							}
 						} catch (Exception e) {
