@@ -8,5 +8,7 @@ public class Driver
 {
 	public static void main(String[] args) {
 		new MainFrame("Humanity");
+		
+		//just adding this comment
 	}
 }
