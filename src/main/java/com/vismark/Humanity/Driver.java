@@ -8,7 +8,5 @@ public class Driver
 {
 	public static void main(String[] args) {
 		new MainFrame("Georgetown Chat");
-		
-		//just adding this comment (on Wed Jan 3, 2017)
 	}
 }

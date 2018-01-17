@@ -48,7 +48,7 @@ public class MainFrame extends JFrame {
 					hostname = userRegistrationPanel.getHost();
 					port = userRegistrationPanel.getPortNumber();
 					connectionToServer = new Socket(hostname, port);
-					System.out.println("connection to the server was made!!!");
+					System.out.println("connection to the server was made");
 					userRegistrationPanel.turnAllPanelItemsIndeditable();
 					userRegistrationPanel.changeTextOnConnectionButton();
 					userInputPanel.enableUserInputPanel();
