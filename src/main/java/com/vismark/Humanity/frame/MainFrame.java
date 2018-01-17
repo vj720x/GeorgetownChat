@@ -55,7 +55,8 @@ public class MainFrame extends JFrame {
 					listenForMessagesFromServer();
 					
 					connectedUsersPanel.addNewUser(myUserName);
-				} catch (UnknownHostException e) {
+				} 
+				catch (UnknownHostException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
